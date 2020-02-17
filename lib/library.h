@@ -1,6 +1,6 @@
 #ifndef LIB_LIBRARY_H
 #define LIB_LIBRARY_H
 
-void hello();
+int sign(double value);
 
 #endif //LIB_LIBRARY_H
