@@ -5,17 +5,17 @@ using UnityEngine;
 public class LinearClassification : MonoBehaviour
 {
     [DllImport("lib.dll")]
-    private static extern IntPtr create_model(int inDim, int outDim);
+    private static extern IntPtr linearCreateModel(int inDim);
     
     [DllImport("lib.dll")]
-    private static extern int predict(IntPtr model, int inDim, double[] paramsDim);
+    private static extern int linearClassPredict(IntPtr model, int inDim, double[] paramsDim);
 
     [DllImport("lib.dll")]
-    private static extern void train(IntPtr model, int inDim, int epoch, double trainingStep, 
+    private static extern void linearClassTrain(IntPtr model, int inDim, int epoch, double trainingStep, 
         double[] trainingParams, int trainingParamsNumber, double[] trainingResults);
 
     [DllImport("lib.dll")]
-    private static extern void clear_model(IntPtr model);
+    private static extern void linearClearModel(IntPtr model);
 
     
     //Marshal
@@ -43,7 +43,7 @@ public class LinearClassification : MonoBehaviour
             Clear();
         }
         
-        _model = create_model(2, 0);
+        _model = linearCreateModel(2);
         Debug.Log("Model created !");
     }
 
@@ -65,7 +65,7 @@ public class LinearClassification : MonoBehaviour
             trainingParams[i * 2 + 1] = trainingSpheres[i].position.z;
             trainingResults[i] = trainingSpheres[i].position.y;
         }
-        train(_model.Value, 2, epoch, 0.1, trainingParams, trainingSphereNumber, trainingResults);
+        linearClassTrain(_model.Value, 2, epoch, 0.1, trainingParams, trainingSphereNumber, trainingResults);
         Debug.Log("Model trained !");
     }
 
@@ -82,7 +82,7 @@ public class LinearClassification : MonoBehaviour
         {
             var position = testSphere.position;
             double[] paramsDim = {position.x, position.z};
-            var predicted = predict(_model.Value, 2, paramsDim);
+            var predicted = linearClassPredict(_model.Value, 2, paramsDim);
             
             position = new Vector3(
                 position.x,
@@ -98,7 +98,7 @@ public class LinearClassification : MonoBehaviour
         // Call lib Free model
         if (_model != null)
         {
-            clear_model(_model.Value);
+            linearClearModel(_model.Value);
             _model = null;
         }
     }

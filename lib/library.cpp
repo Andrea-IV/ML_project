@@ -4,8 +4,10 @@
 
 #include <iostream>
 
+//[type_model][class/regression][fonction]
+
 extern "C" {
-    __declspec(dllexport) double * create_model(int inDim, int outDim) {
+    __declspec(dllexport) double * linearCreateModel(int inDim) {
         int weightsSize = inDim + 1;
         auto weights = (double *)(malloc(weightsSize * sizeof(double)));
 
@@ -19,7 +21,7 @@ extern "C" {
         return weights;
     }
 
-    __declspec(dllexport) int predict(double *model, int inDim, double *params) {
+    __declspec(dllexport) int linearClassPredict(double *model, int inDim, double *params) {
         double sum = model[0];
         for(int i = 0; i < inDim; i++) {
             sum += params[i] * model[i + 1];
@@ -29,8 +31,8 @@ extern "C" {
         return result;
     }
 
-    __declspec(dllexport)void train(double *model, int inDim, int epoch, double trainingStep, double *trainingParams, int trainingParamsNumber,
-                                    const double *trainingResults) {
+    __declspec(dllexport)void linearClassTrain(double *model, int inDim, int epoch, double trainingStep,
+            double *trainingParams, int trainingParamsNumber, const double *trainingResults) {
 
         std::default_random_engine randomEngine(std::chrono::system_clock::now().time_since_epoch().count());
         std::uniform_real_distribution<float> distribution{0, 1};
@@ -38,7 +40,8 @@ extern "C" {
         for(int e = 0; e < epoch; e++) {
             int trainingPicked = floor(distribution(randomEngine) * trainingParamsNumber);
             int trainingParamsPosition = inDim * trainingPicked;
-            double modification = (double)trainingStep * (trainingResults[trainingPicked] - predict(model, inDim, &trainingParams[trainingParamsPosition]));
+            double modification = (double)trainingStep * (trainingResults[trainingPicked] -
+                    linearClassPredict(model, inDim, &trainingParams[trainingParamsPosition]));
             model[0] += modification;
 
             for(int j = 0; j < inDim; j++) {
@@ -47,7 +50,7 @@ extern "C" {
         }
     }
 
-    __declspec(dllexport) void clear_model(const double *model) {
+    __declspec(dllexport) void linearClearModel(const double *model) {
         delete model;
     }
 }
@@ -60,7 +63,7 @@ void predictAll(double *model) {
     for(double i = -7; i < 8; i += 1) {
         for(double j = 0; j < 15; j += 1) {
             double params[] = {i, j};
-            int predicted = predict(model, 2, params);
+            int predicted = linearClassPredict(model, 2, params);
             std::cout << (predicted == 0 ? "0" : predicted >= 1 ? "+" : "-");
         }
         std::cout << std::endl;
@@ -69,11 +72,11 @@ void predictAll(double *model) {
 
 int main(int argc, char **argv) {
     int inDim = 2;
-    double *model = create_model(inDim, 0);
+    double *model = linearCreateModel(inDim);
 
     double trainingParams[] = {-3, 9, 6, 13, -7, 2};
     double trainingResults[] = {1, 1, -1};
-    train(model, 2, 1000, 0.1, trainingParams, 3, trainingResults);
+    linearClassTrain(model, 2, 1000, 0.1, trainingParams, 3, trainingResults);
 
     predictAll(model);
 
