@@ -1,8 +1,9 @@
 using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
-public class LinearClassificationXor : MonoBehaviour
+public class LinearClassificationSoft : MonoBehaviour
 {
     [DllImport("lib.dll")]
     private static extern IntPtr linearCreateModel(int inDim);
@@ -43,8 +44,28 @@ public class LinearClassificationXor : MonoBehaviour
             Clear();
         }
         
-        _model = linearCreateModel(1);
+        _model = linearCreateModel(2);
         Debug.Log("Model created !");
+    }
+
+    private Vector3 TransformPosition(Vector3 initial)
+    {
+        var x = initial.x;
+        var z = initial.z;
+        if (x <= 5 && x >= 4 && z >= 3 && z <= 4 ||
+            x >= -3 && x <= -2 && z >= 9 && z <= 10)
+        {
+            x += 3;
+            z += 3;
+        }
+
+        if (x <= 4 && x >= 3 && z >= 6 && z <= 7)
+        {
+            x -= 3;
+            z -= 3;
+        }
+        
+        return new Vector3(x, initial.y, z);
     }
 
     public void Train()
@@ -61,10 +82,13 @@ public class LinearClassificationXor : MonoBehaviour
         var trainingResults = new double[trainingSphereNumber];
         for (var i = 0; i < trainingSphereNumber; i++)
         {
-            trainingParams[i] = Math.Pow(trainingSpheres[i].position.x + trainingSpheres[i].position.z, 2);
-            trainingResults[i] = trainingSpheres[i].position.y;
+            var position = trainingSpheres[i].position;
+            position = TransformPosition(position);
+            trainingParams[i * 2] = position.x;
+            trainingParams[i * 2 + 1] = position.z;
+            trainingResults[i] = position.y;
         }
-        linearClassTrain(_model.Value, 1, epoch, 0.1, trainingParams, trainingSphereNumber, trainingResults);
+        linearClassTrain(_model.Value, 2, epoch, 0.1, trainingParams, trainingSphereNumber, trainingResults);
         Debug.Log("Model trained !");
     }
 
@@ -80,9 +104,10 @@ public class LinearClassificationXor : MonoBehaviour
         foreach (var testSphere in testSpheres)
         {
             var position = testSphere.position;
-            double[] paramsDim = {Math.Pow(position.x + position.z, 2)};
-            var predicted = linearClassPredict(_model.Value, 1, paramsDim);
-
+            var transformedPosition = TransformPosition(position);
+            double[] paramsDim = {transformedPosition.x, transformedPosition.z};
+            var predicted = linearClassPredict(_model.Value, 2, paramsDim);
+            
             position = new Vector3(
                 position.x,
                 predicted * (float)0.5,

@@ -1226,7 +1226,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1247551137}
+      - m_Target: {fileID: 2049246314}
         m_MethodName: Predict
         m_Mode: 1
         m_Arguments:
@@ -7291,7 +7291,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1247551137}
+      - m_Target: {fileID: 2049246314}
         m_MethodName: Reinitialize
         m_Mode: 1
         m_Arguments:
@@ -10613,7 +10613,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1247551137}
+      - m_Target: {fileID: 2049246314}
         m_MethodName: Clear
         m_Mode: 1
         m_Arguments:
@@ -11021,7 +11021,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1247551137}
+      - m_Target: {fileID: 2049246314}
         m_MethodName: CreateModel
         m_Mode: 1
         m_Arguments:
@@ -15543,327 +15543,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1243368981}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1247551136
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1247551138}
-  - component: {fileID: 1247551137}
-  m_Layer: 0
-  m_Name: "Script non s\xE9parable soft"
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1247551137
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1247551136}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 381dcc8eecb44cc19d6c589fd980693b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  testSpheres:
-  - {fileID: 1757015794}
-  - {fileID: 1826941631}
-  - {fileID: 2143494371}
-  - {fileID: 1258907161}
-  - {fileID: 1965649940}
-  - {fileID: 1823019900}
-  - {fileID: 258054810}
-  - {fileID: 1911408326}
-  - {fileID: 720447674}
-  - {fileID: 679231006}
-  - {fileID: 924146334}
-  - {fileID: 1268371681}
-  - {fileID: 539850747}
-  - {fileID: 429665025}
-  - {fileID: 1658911455}
-  - {fileID: 1641686072}
-  - {fileID: 1867505007}
-  - {fileID: 908186664}
-  - {fileID: 1020588950}
-  - {fileID: 1970786452}
-  - {fileID: 443192535}
-  - {fileID: 1075104228}
-  - {fileID: 1348775621}
-  - {fileID: 1697241429}
-  - {fileID: 1472503377}
-  - {fileID: 509039268}
-  - {fileID: 1616646990}
-  - {fileID: 1195892451}
-  - {fileID: 750553740}
-  - {fileID: 99310605}
-  - {fileID: 2083955789}
-  - {fileID: 909020479}
-  - {fileID: 557494966}
-  - {fileID: 406022636}
-  - {fileID: 1991462251}
-  - {fileID: 1598814016}
-  - {fileID: 2038738078}
-  - {fileID: 2138094353}
-  - {fileID: 1858161549}
-  - {fileID: 20285246}
-  - {fileID: 1107510295}
-  - {fileID: 710797389}
-  - {fileID: 130997639}
-  - {fileID: 1267868019}
-  - {fileID: 1392164981}
-  - {fileID: 1145733549}
-  - {fileID: 448142354}
-  - {fileID: 435686198}
-  - {fileID: 1711925484}
-  - {fileID: 1550676215}
-  - {fileID: 1346291085}
-  - {fileID: 76872581}
-  - {fileID: 1309591772}
-  - {fileID: 230967798}
-  - {fileID: 261839815}
-  - {fileID: 1698283430}
-  - {fileID: 307552209}
-  - {fileID: 1776635357}
-  - {fileID: 1166396357}
-  - {fileID: 1452975347}
-  - {fileID: 2047660437}
-  - {fileID: 2048618857}
-  - {fileID: 1232213585}
-  - {fileID: 1058592124}
-  - {fileID: 806757606}
-  - {fileID: 1869052390}
-  - {fileID: 671847917}
-  - {fileID: 1322320350}
-  - {fileID: 573949045}
-  - {fileID: 103574444}
-  - {fileID: 542015890}
-  - {fileID: 1788498203}
-  - {fileID: 1436660933}
-  - {fileID: 738193593}
-  - {fileID: 789731888}
-  - {fileID: 2031794818}
-  - {fileID: 1085575805}
-  - {fileID: 662420444}
-  - {fileID: 1635690069}
-  - {fileID: 449769768}
-  - {fileID: 1251209750}
-  - {fileID: 2060275964}
-  - {fileID: 1409801698}
-  - {fileID: 1128191741}
-  - {fileID: 27748762}
-  - {fileID: 533904771}
-  - {fileID: 688778294}
-  - {fileID: 904751114}
-  - {fileID: 1919097061}
-  - {fileID: 885120846}
-  - {fileID: 281909182}
-  - {fileID: 2037199078}
-  - {fileID: 191581975}
-  - {fileID: 295344255}
-  - {fileID: 438985965}
-  - {fileID: 1995203754}
-  - {fileID: 286201626}
-  - {fileID: 493440186}
-  - {fileID: 1366255550}
-  - {fileID: 103183154}
-  - {fileID: 1243368982}
-  - {fileID: 986080999}
-  - {fileID: 1486142359}
-  - {fileID: 65358863}
-  - {fileID: 441297225}
-  - {fileID: 1138204515}
-  - {fileID: 1918756106}
-  - {fileID: 154222630}
-  - {fileID: 1161702652}
-  - {fileID: 1497176477}
-  - {fileID: 1707859743}
-  - {fileID: 1276452511}
-  - {fileID: 1767169571}
-  - {fileID: 685821825}
-  - {fileID: 237254000}
-  - {fileID: 563813696}
-  - {fileID: 250893495}
-  - {fileID: 978171022}
-  - {fileID: 1240265303}
-  - {fileID: 1412417197}
-  - {fileID: 1910607015}
-  - {fileID: 1658521880}
-  - {fileID: 150771678}
-  - {fileID: 21826484}
-  - {fileID: 140593708}
-  - {fileID: 796847640}
-  - {fileID: 1317604295}
-  - {fileID: 538089011}
-  - {fileID: 1420953939}
-  - {fileID: 1228884688}
-  - {fileID: 1642750049}
-  - {fileID: 388156840}
-  - {fileID: 853816019}
-  - {fileID: 612247704}
-  - {fileID: 269072932}
-  - {fileID: 1808356113}
-  - {fileID: 112411606}
-  - {fileID: 985148231}
-  - {fileID: 1902778397}
-  - {fileID: 555902322}
-  - {fileID: 1208890597}
-  - {fileID: 1848843855}
-  - {fileID: 1662779220}
-  - {fileID: 213000739}
-  - {fileID: 2087081139}
-  - {fileID: 1679474587}
-  - {fileID: 198494242}
-  - {fileID: 559787204}
-  - {fileID: 406344024}
-  - {fileID: 448761103}
-  - {fileID: 1718051488}
-  - {fileID: 37616466}
-  - {fileID: 1141535210}
-  - {fileID: 2026849357}
-  - {fileID: 1065171899}
-  - {fileID: 2136490318}
-  - {fileID: 747821833}
-  - {fileID: 394447740}
-  - {fileID: 1169477230}
-  - {fileID: 1495540014}
-  - {fileID: 605708447}
-  - {fileID: 1571054570}
-  - {fileID: 1095057952}
-  - {fileID: 1956659441}
-  - {fileID: 10223114}
-  - {fileID: 2056132318}
-  - {fileID: 1978109997}
-  - {fileID: 1221221814}
-  - {fileID: 475978441}
-  - {fileID: 254223555}
-  - {fileID: 1249348893}
-  - {fileID: 111216284}
-  - {fileID: 1424224372}
-  - {fileID: 2031788401}
-  - {fileID: 1226171604}
-  - {fileID: 2131700349}
-  - {fileID: 1803263978}
-  - {fileID: 644420485}
-  - {fileID: 1776338567}
-  - {fileID: 431088356}
-  - {fileID: 1265656597}
-  - {fileID: 1478824522}
-  - {fileID: 32272279}
-  - {fileID: 911121861}
-  - {fileID: 1911874898}
-  - {fileID: 797474986}
-  - {fileID: 1603309764}
-  - {fileID: 1428109778}
-  - {fileID: 2090524102}
-  - {fileID: 818697550}
-  - {fileID: 277310743}
-  - {fileID: 161574617}
-  - {fileID: 1831443646}
-  - {fileID: 388192111}
-  - {fileID: 1776965292}
-  - {fileID: 1453653220}
-  - {fileID: 1387255073}
-  - {fileID: 1318701787}
-  - {fileID: 1581652566}
-  - {fileID: 1572336933}
-  - {fileID: 1662584983}
-  - {fileID: 1338683959}
-  - {fileID: 691308806}
-  - {fileID: 682132432}
-  - {fileID: 193266416}
-  - {fileID: 66237789}
-  - {fileID: 1691211989}
-  - {fileID: 1426613017}
-  - {fileID: 2045796006}
-  - {fileID: 2146928156}
-  - {fileID: 1696347073}
-  - {fileID: 421001231}
-  - {fileID: 116158638}
-  - {fileID: 1089918370}
-  - {fileID: 70397257}
-  - {fileID: 193798148}
-  - {fileID: 676955957}
-  - {fileID: 1457831468}
-  - {fileID: 410398077}
-  - {fileID: 2040253329}
-  - {fileID: 2128022227}
-  - {fileID: 1337570888}
-  - {fileID: 366075573}
-  - {fileID: 282751029}
-  - {fileID: 624736845}
-  trainingSpheres:
-  - {fileID: 1390371098}
-  - {fileID: 1526825882}
-  - {fileID: 1883531596}
-  - {fileID: 642812520}
-  - {fileID: 1707330545}
-  - {fileID: 559903215}
-  - {fileID: 361190742}
-  - {fileID: 239605990}
-  - {fileID: 1861562949}
-  - {fileID: 759303618}
-  - {fileID: 989154454}
-  - {fileID: 1961638136}
-  - {fileID: 1349231585}
-  - {fileID: 1111581817}
-  - {fileID: 333555376}
-  - {fileID: 924705104}
-  - {fileID: 413824331}
-  - {fileID: 617175064}
-  - {fileID: 254399645}
-  - {fileID: 389993682}
-  - {fileID: 1220102544}
-  - {fileID: 1935958384}
-  - {fileID: 1996622167}
-  - {fileID: 402900954}
-  - {fileID: 1938956110}
-  - {fileID: 256158574}
-  - {fileID: 495815667}
-  - {fileID: 698492442}
-  - {fileID: 1872821058}
-  - {fileID: 1540599796}
-  - {fileID: 814850977}
-  - {fileID: 432381913}
-  - {fileID: 1889486921}
-  - {fileID: 2133725113}
-  - {fileID: 321943291}
-  - {fileID: 1023187538}
-  - {fileID: 20464224}
-  - {fileID: 1412367206}
-  - {fileID: 368426988}
-  - {fileID: 1653501761}
-  - {fileID: 629968896}
-  - {fileID: 1569030212}
-  - {fileID: 1205568442}
-  - {fileID: 217502308}
-  - {fileID: 2126519257}
-  - {fileID: 1181882284}
-  - {fileID: 1462746411}
-  - {fileID: 531896409}
-  - {fileID: 1132139581}
-  - {fileID: 396346802}
-  epoch: 100000
---- !u!4 &1247551138
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1247551136}
-  m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.2577207, y: 3.3162336, z: -6.0868444}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1249348892
 GameObject:
   m_ObjectHideFlags: 0
@@ -21898,7 +21577,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1247551137}
+      - m_Target: {fileID: 2049246314}
         m_MethodName: Train
         m_Mode: 1
         m_Arguments:
@@ -26380,7 +26059,7 @@ GameObject:
   - component: {fileID: 2049246315}
   - component: {fileID: 2049246314}
   m_Layer: 0
-  m_Name: "Script s\xE9parable"
+  m_Name: Script soft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26395,7 +26074,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2049246313}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5078ea4c768466c4e94c5986f5d5d83e, type: 3}
+  m_Script: {fileID: 11500000, guid: 96660fdbc59b4706bfef628c573e46c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   testSpheres:
@@ -26688,7 +26367,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2056132317
 GameObject:
