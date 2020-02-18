@@ -9,4 +9,7 @@ typedef struct MlpModel {
 
 int sign(double value);
 
+MlpModel * importMlpModel(const double *rawModel);
+double * exportMlpModel(MlpModel *model);
+
 #endif //LIB_LIBRARY_H

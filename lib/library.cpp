@@ -97,15 +97,104 @@ void predictAll(double *model) {
     }
 }
 
+void displayMlpModel(MlpModel *model) {
+    std::cout << "layers : " << model->layers << std::endl;
+    std::cout << "npl : [ ";
+    for(int i = 0; i < model->layers; i++) {
+        std::cout << model->npl[i] << " ";
+    }
+    std::cout << "]" << std::endl;
+
+    std::cout << "Weights :" << std::endl << "[" << std::endl;
+    for(int l = 0; l < model->layers - 1; l++) {
+        std::cout << "\t[" << std::endl;
+        for(int i = 0; i < model->npl[l] + 1; i++) {
+            std::cout << "\t\t[ ";
+            for(int j = 0; j < model->npl[l + 1]; j++) {
+                std::cout << model->weigths[l][i][j] << " ";
+            }
+            std::cout << "]" << std::endl;
+        }
+        std::cout << "\t]" << std::endl;
+    }
+    std::cout << "]" << std::endl;
+}
+
+MlpModel * importMlpModel(const double *rawModel) {
+    auto *model = (MlpModel *) malloc(sizeof(MlpModel));
+    model->layers = (int) rawModel[0];
+    model->npl = (int *) malloc(model->layers * sizeof(int));
+
+    int modelIndex = 1;
+    // Fill npl array
+    for(int i = 0; i < model->layers; i++) {
+        model->npl[i] = (int) rawModel[modelIndex];
+        modelIndex++;
+    }
+
+    // Malloc and fill weights array
+    model->weigths = (double ***) malloc((model->layers - 1) * sizeof(double **));
+    for(int l = 1; l < model->layers; l++) {
+        model->weigths[l - 1] = (double **) malloc((model->npl[l - 1] + 1) * sizeof(double *));
+        for(int i = 0; i < model->npl[l - 1] + 1; i++) {
+            model->weigths[l - 1][i] = (double *) malloc(model->npl[l] * sizeof(double));
+            for(int j = 0; j < model->npl[l]; j++) {
+                model->weigths[l - 1][i][j] = rawModel[modelIndex];
+                rawModel++;
+            }
+        }
+    }
+
+    return model;
+}
+
+double * exportMlpModel(MlpModel *model) {
+    int totalNodes = 0;
+    for(int i = 0; i < model->layers - 1; i++) {
+        totalNodes += (model->npl[i] + 1) * model->npl[i + 1];
+    }
+
+    int modelSize = 1 + model->layers + totalNodes;
+    auto rawModel = (double *)(malloc(modelSize * sizeof(double)));
+
+    rawModel[0] = model->layers;
+    int modelIndex = 1;
+    for(int i = 0; i < model->layers; i++) {
+        rawModel[modelIndex] = model->npl[i];
+        modelIndex++;
+    }
+
+    for(int l = 0; l < model->layers - 1; l++) {
+        for(int i = 0; i < model->npl[l] + 1; i++) {
+            for(int j = 0; j < model->npl[l + 1]; j++) {
+                rawModel[modelIndex] = model->weigths[l][i][j];
+                modelIndex++;
+            }
+        }
+    }
+
+    return rawModel;
+}
+
 int main(int argc, char **argv) {
-    int inDim = 2;
-    double *model = linearCreateModel(inDim);
+//    int inDim = 2;
+//    double *model = linearCreateModel(inDim);
+//
+//    double trainingParams[] = {-3, 9, 6, 13, -7, 2};
+//    double trainingResults[] = {1, 1, -1};
+//    linearClassTrain(model, 2, 1000, 0.1, trainingParams, 3, trainingResults);
+//
+//    predictAll(model);
 
-    double trainingParams[] = {-3, 9, 6, 13, -7, 2};
-    double trainingResults[] = {1, 1, -1};
-    linearClassTrain(model, 2, 1000, 0.1, trainingParams, 3, trainingResults);
+//    int layers = 5;
+//    int npl[] = {3, 4, 4, 2, 3};
+    int layers = 3;
+    int npl[] = {2, 3, 1};
+    double *rawModel = mlpCreateModel(layers, npl);
+    MlpModel *model = importMlpModel(rawModel);
+    displayMlpModel(model);
 
-    predictAll(model);
+    displayMlpModel(importMlpModel(exportMlpModel(model)));
 
     return 0;
 }
