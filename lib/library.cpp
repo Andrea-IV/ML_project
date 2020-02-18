@@ -53,6 +53,33 @@ extern "C" {
     __declspec(dllexport) void linearClearModel(const double *model) {
         delete model;
     }
+
+    __declspec(dllexport) double * mlpCreateModel(int layers, const int npl[]) {
+        int totalNodes = 0;
+        for(int i = 0; i < layers - 1; i++) {
+            totalNodes += (npl[i] + 1) * npl[i + 1];
+        }
+
+        int modelSize = 1 + layers + totalNodes;
+        auto model = (double *)(malloc(modelSize * sizeof(double)));
+
+        model[0] = layers;
+        int modelIndex = 1;
+        for(int i = 0; i < layers; i++) {
+            model[modelIndex] = npl[i];
+            modelIndex++;
+        }
+
+        std::default_random_engine randomEngine(std::chrono::system_clock::now().time_since_epoch().count());
+        std::uniform_real_distribution<float> distribution{-1, 1};
+
+        while(modelIndex < modelSize) {
+            model[modelIndex] = distribution(randomEngine);
+            modelIndex++;
+        }
+
+        return model;
+    }
 }
 
 int sign(double value) {
