@@ -56,10 +56,10 @@ public class LinearClassification : MonoBehaviour
         }
         
         // Call lib to train on the array
-        int trainingSphereNumber = trainingSpheres.Length;
-        double[] trainingParams = new double[trainingSphereNumber * 2];
-        double[] trainingResults = new double[trainingSphereNumber];
-        for (int i = 0; i < trainingSphereNumber; i++)
+        var trainingSphereNumber = trainingSpheres.Length;
+        var trainingParams = new double[trainingSphereNumber * 2];
+        var trainingResults = new double[trainingSphereNumber];
+        for (var i = 0; i < trainingSphereNumber; i++)
         {
             trainingParams[i * 2] = trainingSpheres[i].position.x;
             trainingParams[i * 2 + 1] = trainingSpheres[i].position.z;
@@ -96,10 +96,9 @@ public class LinearClassification : MonoBehaviour
     public void Clear()
     {
         // Call lib Free model
-        if (_model != null)
-        {
-            linearClearModel(_model.Value);
-            _model = null;
-        }
+        if (_model == null) return;
+        
+        linearClearModel(_model.Value);
+        _model = null;
     }
 }
