@@ -55,7 +55,6 @@ int sign(double value) {
 }
 
 void predictAll(double *model) {
-    //{-7; 0} - > {7, 14}
     for(double i = -7; i < 8; i += 1) {
         for(double j = 0; j < 15; j += 1) {
             double params[] = {i, j};
