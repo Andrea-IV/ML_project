@@ -12811,7 +12811,7 @@ GameObject:
   - component: {fileID: 1247551138}
   - component: {fileID: 1247551137}
   m_Layer: 0
-  m_Name: Linear classification script not separable
+  m_Name: Script XOR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

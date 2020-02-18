@@ -43,7 +43,7 @@ public class LinearClassificationXor : MonoBehaviour
             Clear();
         }
         
-        _model = linearCreateModel(2);
+        _model = linearCreateModel(1);
         Debug.Log("Model created !");
     }
 
