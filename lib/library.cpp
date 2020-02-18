@@ -7,7 +7,7 @@
 extern "C" {
     __declspec(dllexport) double * create_model(int inDim, int outDim) {
         int weightsSize = inDim + 1;
-        auto *weights = (double *)(malloc(weightsSize * sizeof(double)));
+        auto weights = (double *)(malloc(weightsSize * sizeof(double)));
 
         std::default_random_engine randomEngine(std::chrono::system_clock::now().time_since_epoch().count());
         std::uniform_real_distribution<float> distribution{-1, 1};
@@ -32,15 +32,17 @@ extern "C" {
     __declspec(dllexport)void train(double *model, int inDim, int epoch, double trainingStep, double *trainingParams, int trainingParamsNumber,
                                     const double *trainingResults) {
 
-        for(int e = 0; e < epoch; e++) {
-            for(int i = 0; i < trainingParamsNumber; i++) {
-                int trainingParamsPosition = inDim * i;
-                double modification = (double)trainingStep * (trainingResults[i] - predict(model, inDim, &trainingParams[trainingParamsPosition]));
-                model[0] += modification;
+        std::default_random_engine randomEngine(std::chrono::system_clock::now().time_since_epoch().count());
+        std::uniform_real_distribution<float> distribution{0, 1};
 
-                for(int j = 0; j < inDim; j++) {
-                    model[j + 1] += modification * trainingParams[trainingParamsPosition + j];
-                }
+        for(int e = 0; e < epoch; e++) {
+            int trainingPicked = floor(distribution(randomEngine) * trainingParamsNumber);
+            int trainingParamsPosition = inDim * trainingPicked;
+            double modification = (double)trainingStep * (trainingResults[trainingPicked] - predict(model, inDim, &trainingParams[trainingParamsPosition]));
+            model[0] += modification;
+
+            for(int j = 0; j < inDim; j++) {
+                model[j + 1] += modification * trainingParams[trainingParamsPosition + j];
             }
         }
     }
@@ -71,7 +73,7 @@ int main(int argc, char **argv) {
 
     double trainingParams[] = {-3, 9, 6, 13, -7, 2};
     double trainingResults[] = {1, 1, -1};
-    train(model, 2, 10, 0.1, trainingParams, 3, trainingResults);
+    train(model, 2, 1000, 0.1, trainingParams, 3, trainingResults);
 
     predictAll(model);
 

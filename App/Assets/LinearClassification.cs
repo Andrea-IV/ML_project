@@ -22,6 +22,7 @@ public class LinearClassification : MonoBehaviour
 
     public Transform[] testSpheres;
     public Transform[] trainingSpheres;
+    public int epoch = 1000;
 
     private IntPtr? _model;
     
@@ -64,7 +65,7 @@ public class LinearClassification : MonoBehaviour
             trainingParams[i * 2 + 1] = trainingSpheres[i].position.z;
             trainingResults[i] = trainingSpheres[i].position.y;
         }
-        train(_model.Value, 2, 10, 0.1, trainingParams, trainingSphereNumber, trainingResults);
+        train(_model.Value, 2, epoch, 0.1, trainingParams, trainingSphereNumber, trainingResults);
         Debug.Log("Model trained !");
     }
 
@@ -85,7 +86,7 @@ public class LinearClassification : MonoBehaviour
             
             position = new Vector3(
                 position.x,
-                predicted * 2,
+                predicted * (float)0.5,
                 position.z
             );
             testSphere.position = position;
