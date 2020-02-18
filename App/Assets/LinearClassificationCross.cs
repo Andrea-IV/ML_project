@@ -76,16 +76,10 @@ public class LinearClassificationCross : MonoBehaviour
         for (var i = 0; i < trainingSphereNumber; i++)
         {
             var position = trainingSpheres[i].position;
-            var transformedPosition = TransformPosition(trainingSpheres[i].position);
-            trainingParams[i] = transformedPosition.x;
-            trainingParams[i + 1] = transformedPosition.z;
-            trainingResults[i] = transformedPosition.y;
-            
-//            trainingParams[i] = position.x;
-//            trainingParams[i + 1] = position.z;
-//            trainingResults[i] = position.y;
-            
-//            trainingSpheres[i].position = new Vector3(transformedPosition.x, transformedPosition.y, transformedPosition.z);
+            position = TransformPosition(position);
+            trainingParams[i * 2] = position.x;
+            trainingParams[i * 2 + 1] = position.z;
+            trainingResults[i] = position.y;
         }
         linearClassTrain(_model.Value, 2, epoch, 0.01, trainingParams, trainingSphereNumber, trainingResults);
         Debug.Log("Model trained !");
@@ -116,7 +110,7 @@ public class LinearClassificationCross : MonoBehaviour
                 position.z
             );
 
-            position = new Vector3(transformedPosition.x, predicted * (float)0.5, transformedPosition.z);
+//            position = new Vector3(transformedPosition.x, predicted * (float)0.5, transformedPosition.z);
             testSphere.position = position;
         }
     }
