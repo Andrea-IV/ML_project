@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-public class LinearClassificationXOR : MonoBehaviour
+public class LinearClassificationXor : MonoBehaviour
 {
     [DllImport("lib.dll")]
     private static extern IntPtr linearCreateModel(int inDim);
@@ -82,9 +82,7 @@ public class LinearClassificationXOR : MonoBehaviour
             var position = testSphere.position;
             double[] paramsDim = {Math.Pow(position.x + position.z, 2)};
             var predicted = linearClassPredict(_model.Value, 1, paramsDim);
-            
-            Debug.Log(paramsDim);
-            
+
             position = new Vector3(
                 position.x,
                 predicted * (float)0.5,
