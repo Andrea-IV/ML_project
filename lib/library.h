@@ -12,4 +12,7 @@ int sign(double value);
 MlpModel * importMlpModel(const double *rawModel);
 double * exportMlpModel(MlpModel *model);
 
+double ** calculateNodes(MlpModel *model, double *inParams);
+void displayNodes(MlpModel *model, double **nodes);
+
 #endif //LIB_LIBRARY_H

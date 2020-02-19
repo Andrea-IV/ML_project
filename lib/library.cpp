@@ -60,8 +60,6 @@ extern "C" {
             totalWeights += (npl[i] + 1) * npl[i + 1];
         }
 
-        totalWeights += npl[layers - 1] + 1;
-
         int modelSize = 1 + layers + totalWeights;
         auto model = (double *)(malloc(modelSize * sizeof(double)));
 
@@ -85,42 +83,16 @@ extern "C" {
 
     __declspec(dllexport) double mlpPredict(double *rawModel, double *inParams) {
         auto model = importMlpModel(rawModel);
-        auto nodes = (double **) malloc(model->layers * sizeof(double *));
-
-        nodes[0] = (double *) malloc((model->npl[0] + 1) * sizeof(double));
-
-        nodes[0][0] = 1;
-        for(int i = 0; i < model->npl[0]; i++) {
-            nodes[0][i + 1] = inParams[i];
-        }
-
-        for(int l = 1; l < model->layers; l++) {
-            nodes[l] = (double *) malloc((model->npl[l] + 1) * sizeof(double));
-            nodes[l][0] = 1;
-            for(int i = 0; i < model->npl[l]; i++) {
-                double sum = 0;
-                for(int j = 0; j < model->npl[l - 1] + 1; j++) {
-                    sum += nodes[l - 1][j] * model->weigths[l - 1][j][i];
-                }
-                nodes[l][i + 1] = tanh(sum);
-            }
-        }
+        auto nodes = calculateNodes(model, inParams);
 
         //Display nodes to verify
-        std::cout << "Nodes :" << std::endl << "[ " << std::endl;
-        for(int l = 0; l < model->layers; l++) {
-            std::cout << "\t[ ";
-            for(int i = 0; i < model->npl[l] + 1; i++) {
-                std::cout << nodes[l][i] << " ";
-            }
-            std::cout << "]" << std::endl;
-        }
-        std::cout << "]" << std::endl;
+        displayNodes(model, nodes);
 
         double sum = 0;
-        for(int i = 0; i < model->npl[model->layers - 1] + 1; i++) {
+        for(int i = 0; i < model->npl[model->layers - 1]; i++) {
             sum += nodes[model->layers - 1][i] * model->weigths[model->layers - 1][i][0];
         }
+
         return sign(sum);
     }
 }
@@ -161,11 +133,7 @@ void displayMlpModel(MlpModel *model) {
         std::cout << "\t]" << std::endl;
     }
 
-    std::cout << "\t[" << std::endl << "\t\t[ ";
-    for(int i = 0; i < model->npl[model->layers - 1] + 1; i++) {
-        std::cout << model->weigths[model->layers - 1][i][0] << " ";
-    }
-    std::cout << "]" << std::endl << "\t]" << std::endl << "]" << std::endl;
+    std::cout << "]" << std::endl;
 }
 
 MlpModel * importMlpModel(const double *rawModel) {
@@ -194,7 +162,7 @@ MlpModel * importMlpModel(const double *rawModel) {
     }
 
     model->weigths[model->layers - 1] = (double **) malloc(model->npl[model->layers - 1] * sizeof(double *));
-    for(int i = 0; i < model->npl[model->layers - 1] + 1; i++) {
+    for(int i = 0; i < model->npl[model->layers - 1]; i++) {
         model->weigths[model->layers - 1][i] = (double *) malloc(sizeof(double));
         model->weigths[model->layers - 1][i][0] = rawModel[modelIndex];
         modelIndex++;
@@ -231,16 +199,54 @@ double * exportMlpModel(MlpModel *model) {
     return rawModel;
 }
 
-int main(int argc, char **argv) {
-//    int inDim = 2;
-//    double *model = linearCreateModel(inDim);
-//
-//    double trainingParams[] = {-3, 9, 6, 13, -7, 2};
-//    double trainingResults[] = {1, 1, -1};
-//    linearClassTrain(model, 2, 1000, 0.1, trainingParams, 3, trainingResults);
-//
-//    predictAll(model);
+double ** calculateNodes(MlpModel *model, double *inParams) {
+    auto nodes = (double **) malloc(model->layers * sizeof(double *));
 
+    nodes[0] = (double *) malloc((model->npl[0] + 1) * sizeof(double));
+
+    nodes[0][0] = 1;
+    for(int i = 0; i < model->npl[0]; i++) {
+        nodes[0][i + 1] = inParams[i];
+    }
+
+    for(int l = 1; l < model->layers - 1; l++) {
+        nodes[l] = (double *) malloc((model->npl[l] + 1) * sizeof(double));
+        nodes[l][0] = 1;
+        for(int i = 0; i < model->npl[l]; i++) {
+            double sum = 0;
+            for(int j = 0; j < model->npl[l - 1] + 1; j++) {
+                sum += nodes[l - 1][j] * model->weigths[l - 1][j][i];
+            }
+            nodes[l][i + 1] = tanh(sum);
+        }
+    }
+
+    nodes[model->layers - 1] = (double *) malloc(model->npl[model->layers -1] * sizeof(double));
+    for(int i = 0; i < model->npl[model->layers - 1]; i++) {
+        double sum = 0;
+        for(int j = 0; j < model->npl[model->layers - 2] + 1; j++) {
+            sum += nodes[model->layers - 2][j] * model->weigths[model->layers - 2][j][i];
+        }
+        nodes[model->layers - 1][i] = tanh(sum);
+    }
+
+    return nodes;
+}
+
+void displayNodes(MlpModel *model, double **nodes) {
+    std::cout << "Nodes :" << std::endl << "[ " << std::endl;
+    for(int l = 0; l < model->layers; l++) {
+        std::cout << "\t[ ";
+        auto nodesOnThisLayer = l == model->layers - 1 ? model->npl[l] : model->npl[l] + 1;
+        for(int i = 0; i < nodesOnThisLayer; i++) {
+            std::cout << nodes[l][i] << " ";
+        }
+        std::cout << "]" << std::endl;
+    }
+    std::cout << "]" << std::endl;
+}
+
+int main(int argc, char **argv) {
 //    int layers = 5;
 //    int npl[] = {3, 4, 4, 2, 3};
     int layers = 3;
