@@ -107,20 +107,29 @@ extern "C" {
         auto trainingPosition = (int) floor(distribution(randomEngine) * trainingNumber) * (model->npl[0] + 1);
         auto nodes = calculateNodes(model, &trainingParams[trainingPosition]);
 
+        std::cout << "First delta calculated : " << std::endl;
+
         auto delta = (double **) malloc(model->layers * sizeof(double *));
         delta[model->layers - 1] = (double *) malloc(model->npl[model->layers - 1] * sizeof(double));
         for(int i = 0; i < model->npl[model->layers - 1]; i++) {
             delta[model->layers - 1][i] = (1 - pow(nodes[model->layers - 1][i], 2) * (nodes[model->layers - 1][i] - trainingExpected[i]));
+            std::cout << "delta[" << model->layers - 1 << "][" << i << "] : " << delta[model->layers - 1][i] << std::endl;
         }
+        std::cout << std::endl;
 
         for(int l = model->layers - 2; l >= 0; l--) {
             delta[l] = (double *) malloc((model->npl[l] + 1) * sizeof(double));
             for(int i = 0; i < model->npl[l] + 1; i++) {
                 double sum = 0;
-                for(int j = 0; j < model->npl[l + 1] + 1; j++) {
+//                for(int j = (l == model->layers - 2 ? 0 : 1); j < (l == model->layers - 2 ? model->npl[l + 1] : model->npl[l + 1] + 1); j++) {
+                for(int j = 0; j < model->npl[l + 1]; j++) {
                     sum += model->weigths[l][i][j] * delta[l + 1][j];
+                    std::cout << "model->weigths[" << l << "][" << i << "][" << j << "] : " << model->weigths[l][i][j] <<
+                        "; delta[" << l + 1 << "][" << j << "] : " << delta[l + 1][j] << std::endl;
                 }
                 delta[l][i] = (1 - pow(nodes[l][i], 2)) * sum;
+                std::cout << "calculated delta[" << l << "][" << i << "] : " << delta[l][i] <<
+                "; nodes[" << l << "][" << i << "] : " << nodes[l][i] << std::endl << std::endl;
             }
         }
 
@@ -131,6 +140,23 @@ extern "C" {
                 }
             }
         }
+
+        //Display delta to verify
+        std::cout << "Delta :" << std::endl << "[" << std::endl;
+        for(int l = 0; l < model->layers; l++) {
+            std::cout << "\t[ ";
+            for(int i = 0; i < model->npl[l]; i++) {
+                std::cout << delta[l][i] << " ";
+            }
+            std::cout << "]" << std::endl;
+        }
+        std::cout << "]" << std::endl;
+
+        //Free delta
+        for(int l = 0; l < model->layers; l++) {
+            free(delta[l]);
+        }
+        free(delta);
     }
 }
 
@@ -295,7 +321,10 @@ int main(int argc, char **argv) {
 //    displayMlpModel(importMlpModel(exportMlpModel(model)));
 
     double inParams[] = {3.14, 1.12};
-    std::cout << mlpPredict(rawModel, inParams);
+    std::cout << mlpPredict(rawModel, inParams) << std::endl;
+
+    double expected[] = {5.67};
+    mlpClassTrain(rawModel, 0.1, 1, inParams, expected);
 
     return 0;
 }
