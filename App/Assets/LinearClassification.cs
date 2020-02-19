@@ -5,13 +5,13 @@ using UnityEngine;
 public class LinearClassification : MonoBehaviour
 {
     [DllImport("lib.dll")]
-    private static extern IntPtr linearCreateModel(int inDim);
+    private static extern IntPtr linearCreateModel(int inDim, int outDim);
     
     [DllImport("lib.dll")]
-    private static extern int linearClassPredict(IntPtr model, int inDim, double[] paramsDim);
+    private static extern IntPtr linearClassPredict(IntPtr model, int inDim, int outDim, double[] paramsDim);
 
     [DllImport("lib.dll")]
-    private static extern void linearClassTrain(IntPtr model, int inDim, int epoch, double trainingStep, 
+    private static extern void linearClassTrain(IntPtr model, int inDim, int outDim, int epoch, double trainingStep, 
         double[] trainingParams, int trainingParamsNumber, double[] trainingResults);
 
     [DllImport("lib.dll")]
@@ -43,7 +43,7 @@ public class LinearClassification : MonoBehaviour
             Clear();
         }
         
-        _model = linearCreateModel(2);
+        _model = linearCreateModel(2, 1);
         Debug.Log("Model created !");
     }
 
@@ -65,7 +65,7 @@ public class LinearClassification : MonoBehaviour
             trainingParams[i * 2 + 1] = trainingSpheres[i].position.z;
             trainingResults[i] = trainingSpheres[i].position.y;
         }
-        linearClassTrain(_model.Value, 2, epoch, 0.1, trainingParams, trainingSphereNumber, trainingResults);
+        linearClassTrain(_model.Value, 2, 1, epoch, 0.1, trainingParams, trainingSphereNumber, trainingResults);
         Debug.Log("Model trained !");
     }
 
@@ -82,11 +82,14 @@ public class LinearClassification : MonoBehaviour
         {
             var position = testSphere.position;
             double[] paramsDim = {position.x, position.z};
-            var predicted = linearClassPredict(_model.Value, 2, paramsDim);
+            var predictedPtr = linearClassPredict(_model.Value, 2, 1, paramsDim);
+            var predictedLength = Marshal.ReadInt32(predictedPtr);
+            var predicted = new int[predictedLength];
+            Marshal.Copy(IntPtr.Add(predictedPtr, 4), predicted, 0, predictedLength);
             
             position = new Vector3(
                 position.x,
-                predicted * (float)0.5,
+                predicted[0] * (float)0.5,
                 position.z
             );
             testSphere.position = position;
