@@ -95,6 +95,43 @@ extern "C" {
 
         return sign(sum);
     }
+
+    __declspec(dllexport) void mlpClassTrain(double *rawModel, double trainingStep,
+            int trainingNumber, double *trainingParams, double *trainingExpected) {
+        MlpModel *model = importMlpModel(rawModel);
+
+        std::default_random_engine randomEngine(std::chrono::system_clock::now().time_since_epoch().count());
+        std::uniform_real_distribution<float> distribution{0, 1};
+
+        // Loop here for epoch
+        auto trainingPosition = (int) floor(distribution(randomEngine) * trainingNumber) * (model->npl[0] + 1);
+        auto nodes = calculateNodes(model, &trainingParams[trainingPosition]);
+
+        auto delta = (double **) malloc(model->layers * sizeof(double *));
+        delta[model->layers - 1] = (double *) malloc(model->npl[model->layers - 1] * sizeof(double));
+        for(int i = 0; i < model->npl[model->layers - 1]; i++) {
+            delta[model->layers - 1][i] = (1 - pow(nodes[model->layers - 1][i], 2) * (nodes[model->layers - 1][i] - trainingExpected[i]));
+        }
+
+        for(int l = model->layers - 2; l >= 0; l--) {
+            delta[l] = (double *) malloc((model->npl[l] + 1) * sizeof(double));
+            for(int i = 0; i < model->npl[l] + 1; i++) {
+                double sum = 0;
+                for(int j = 0; j < model->npl[l + 1] + 1; j++) {
+                    sum += model->weigths[l][i][j] * delta[l + 1][j];
+                }
+                delta[l][i] = (1 - pow(nodes[l][i], 2)) * sum;
+            }
+        }
+
+        for(int l = 0; l < model->layers - 1; l++) {
+            for(int i = 0; i < model->npl[l]; i++) {
+                for(int j = 0; j < model->npl[l + 1]; j++) {
+                    model->weigths[l][i][j] = model->weigths[l][i][j] - trainingStep * nodes[l][i] * delta[l + 1][j];
+                }
+            }
+        }
+    }
 }
 
 int sign(double value) {
