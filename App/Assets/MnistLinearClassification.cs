@@ -25,6 +25,9 @@ namespace DefaultNamespace
         
         public int epoch = 1000;
         
+        private const int _numberOfTrainImages = 60000;
+        private const int _numberOfParams = 784;
+        
         public void Reinitialize()
         {
             
@@ -37,7 +40,7 @@ namespace DefaultNamespace
                 Clear();
             }
         
-            _model = linearCreateModel(784);
+            _model = linearCreateModel(_numberOfParams);
         }
 
         public void Train()
@@ -47,31 +50,29 @@ namespace DefaultNamespace
                 Debug.Log("Create model before");
                 return;
             }
-            
-            using (StreamReader sr = new StreamReader("C:\\Users\\casag\\Documents\\ESGI\\MACHINE LEARNING\\mnist-in-csv\\mnist_train.csv"))
+
+            using (StreamReader sr = new StreamReader(Path.Combine(Directory.GetCurrentDirectory(), "Datasets\\mnist-in-csv\\mnist_test.csv")))
             {
-                var numberOfEntries = 60000;
-                var trainingParams = new double[numberOfEntries * 784];
-                var trainingResults = new double[numberOfEntries];
+                var trainingParams = new double[_numberOfTrainImages * _numberOfParams];
+                var trainingResults = new double[_numberOfTrainImages];
                 string currentLine;
                 int currentLineIndex = -1; // First line of file = headers -> allows to begin data parsing at 0
                 
                 while((currentLine = sr.ReadLine()) != null) // CurrentLine will be null when the StreamReader reaches the end of file
                 {
-                    
                     if (currentLineIndex == -1)
                         continue;
                         
-                    var values = currentLine.Split(',');
-                    
-                    for (int i = 1; i < values.Length; i++)
+                    var currentImageParams = currentLine.Split(',');
+                    for (int paramIndex = 1; paramIndex < currentImageParams.Length; paramIndex++)
                     {
-                        trainingParams[currentLineIndex * 784 + (i - 1)] = Convert.ToDouble(values[i]);
+                        trainingParams[currentLineIndex * _numberOfParams + (paramIndex - 1)] = Convert.ToDouble(currentImageParams[paramIndex]);
                     }
-
-                    trainingResults[currentLineIndex] = Convert.ToDouble(values[0]);
                     
-                    linearClassTrain(_model.Value, 784, epoch, 0.1, trainingParams, numberOfEntries, trainingResults);
+                    trainingResults[currentLineIndex] = Convert.ToDouble(currentImageParams[0]);
+                    
+                    linearClassTrain(_model.Value, _numberOfParams, epoch, 0.1, trainingParams, _numberOfTrainImages, trainingResults);
+                    
                     currentLineIndex++;
                 }
             }
@@ -84,13 +85,13 @@ namespace DefaultNamespace
                 Debug.Log("Create model before");
                 return;
             }
-            using (StreamReader sr = new StreamReader("C:\\Users\\casag\\Documents\\ESGI\\MACHINE LEARNING\\mnist-in-csv\\mnist_test.csv"))
+            
+            using (var streamReader = new StreamReader(Path.Combine(Directory.GetCurrentDirectory(), "Datasets\\mnist-in-csv\\mnist_test.csv")))
             {
-                int numberOfEntries = 10000;
                 string currentLine;
                 int currentLineIndex = -1; // La première ligne du fichier est les headers 
                 
-                while((currentLine = sr.ReadLine()) != null) // currentLine will be null when the StreamReader reaches the end of file
+                while((currentLine = streamReader.ReadLine()) != null) // currentLine will be null when the StreamReader reaches the end of file
                 {
                     if (currentLineIndex == -1)
                         continue;
@@ -99,8 +100,8 @@ namespace DefaultNamespace
                     
                     double[] paramsDim = Array.ConvertAll(values.Skip(1).ToArray(), Double.Parse);
 
-                    var predicted = linearClassPredict(_model.Value, 784, paramsDim);
-                    // check if result (get 1) is equal to values[0] and store the result to analyze accuracy
+                    var predicted = linearClassPredict(_model.Value, _numberOfParams, paramsDim);
+                    // TODO: check if result (get 1) is equal to values[0] and store the result to analyze accuracy
                     
                     currentLineIndex++;
                 }
