@@ -38,7 +38,7 @@ extern "C" {
         std::uniform_real_distribution<float> distribution{0, 1};
 
         for(int e = 0; e < epoch; e++) {
-            int trainingPicked = floor(distribution(randomEngine) * trainingParamsNumber);
+            int trainingPicked = (int) floor(distribution(randomEngine) * trainingParamsNumber);
             int trainingParamsPosition = inDim * trainingPicked;
             double modification = (double)trainingStep * (trainingResults[trainingPicked] -
                     linearClassPredict(model, inDim, &trainingParams[trainingParamsPosition]));
@@ -79,6 +79,43 @@ extern "C" {
         }
 
         return model;
+    }
+
+    __declspec(dllexport) double mlpPredict(double *rawModel, double *inParams) {
+        auto model = importMlpModel(rawModel);
+        auto nodes = (double **) malloc(model->layers * sizeof(double *));
+
+        nodes[0] = (double *) malloc((model->npl[0] + 1) * sizeof(double));
+
+        nodes[0][0] = 1;
+        for(int i = 0; i < model->npl[0]; i++) {
+            nodes[0][i + 1] = inParams[i];
+        }
+
+        for(int l = 1; l < model->layers; l++) {
+            nodes[l] = (double *) malloc((model->npl[l] + 1) * sizeof(double));
+            nodes[l][0] = 1;
+            for(int i = 0; i < model->npl[l]; i++) {
+                double sum = 0;
+                for(int j = 0; j < model->npl[l - 1] + 1; j++) {
+                    sum += nodes[l - 1][j] * model->weigths[l - 1][j][i];
+                }
+                nodes[l][i + 1] = tanh(sum);
+            }
+        }
+
+        //Display nodes to verify
+        std::cout << "Nodes :" << std::endl << "[ " << std::endl;
+        for(int l = 0; l < model->layers; l++) {
+            std::cout << "\t[ ";
+            for(int i = 0; i < model->npl[l] + 1; i++) {
+                std::cout << nodes[l][i] << " ";
+            }
+            std::cout << "]" << std::endl;
+        }
+        std::cout << "]" << std::endl;
+
+        return 0.; // TODO : Change this
     }
 }
 
@@ -194,7 +231,10 @@ int main(int argc, char **argv) {
     MlpModel *model = importMlpModel(rawModel);
     displayMlpModel(model);
 
-    displayMlpModel(importMlpModel(exportMlpModel(model)));
+//    displayMlpModel(importMlpModel(exportMlpModel(model)));
+
+    double inParams[] = {3.14, 1.12};
+    mlpPredict(rawModel, inParams);
 
     return 0;
 }
