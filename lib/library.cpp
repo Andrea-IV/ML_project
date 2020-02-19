@@ -117,7 +117,11 @@ extern "C" {
         }
         std::cout << "]" << std::endl;
 
-        return 0.; // TODO : Change this
+        double sum = 0;
+        for(int i = 0; i < model->npl[model->layers - 1] + 1; i++) {
+            sum += nodes[model->layers - 1][i] * model->weigths[model->layers - 1][i][0];
+        }
+        return sign(sum);
     }
 }
 
@@ -248,7 +252,7 @@ int main(int argc, char **argv) {
 //    displayMlpModel(importMlpModel(exportMlpModel(model)));
 
     double inParams[] = {3.14, 1.12};
-    mlpPredict(rawModel, inParams);
+    std::cout << mlpPredict(rawModel, inParams);
 
     return 0;
 }
