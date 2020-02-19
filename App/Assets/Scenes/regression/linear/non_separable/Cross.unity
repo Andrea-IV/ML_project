@@ -15554,7 +15554,7 @@ GameObject:
   - component: {fileID: 1247551138}
   - component: {fileID: 1247551137}
   m_Layer: 0
-  m_Name: Linear classification script
+  m_Name: Linear regression script
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15569,7 +15569,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1247551136}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5078ea4c768466c4e94c5986f5d5d83e, type: 3}
+  m_Script: {fileID: 11500000, guid: a71ebe6c26cbbea41ac5d1be4117915a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   testSpheres:
