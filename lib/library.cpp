@@ -55,12 +55,14 @@ extern "C" {
     }
 
     __declspec(dllexport) double * mlpCreateModel(int layers, const int npl[]) {
-        int totalNodes = 0;
+        int totalWeights = 0;
         for(int i = 0; i < layers - 1; i++) {
-            totalNodes += (npl[i] + 1) * npl[i + 1];
+            totalWeights += (npl[i] + 1) * npl[i + 1];
         }
 
-        int modelSize = 1 + layers + totalNodes;
+        totalWeights += npl[layers - 1] + 1;
+
+        int modelSize = 1 + layers + totalWeights;
         auto model = (double *)(malloc(modelSize * sizeof(double)));
 
         model[0] = layers;
@@ -154,7 +156,12 @@ void displayMlpModel(MlpModel *model) {
         }
         std::cout << "\t]" << std::endl;
     }
-    std::cout << "]" << std::endl;
+
+    std::cout << "\t[" << std::endl << "\t\t[ ";
+    for(int i = 0; i < model->npl[model->layers - 1] + 1; i++) {
+        std::cout << model->weigths[model->layers - 1][i][0] << " ";
+    }
+    std::cout << "]" << std::endl << "\t]" << std::endl << "]" << std::endl;
 }
 
 MlpModel * importMlpModel(const double *rawModel) {
@@ -170,16 +177,23 @@ MlpModel * importMlpModel(const double *rawModel) {
     }
 
     // Malloc and fill weights array
-    model->weigths = (double ***) malloc((model->layers - 1) * sizeof(double **));
+    model->weigths = (double ***) malloc((model->layers) * sizeof(double **));
     for(int l = 1; l < model->layers; l++) {
         model->weigths[l - 1] = (double **) malloc((model->npl[l - 1] + 1) * sizeof(double *));
         for(int i = 0; i < model->npl[l - 1] + 1; i++) {
             model->weigths[l - 1][i] = (double *) malloc(model->npl[l] * sizeof(double));
             for(int j = 0; j < model->npl[l]; j++) {
                 model->weigths[l - 1][i][j] = rawModel[modelIndex];
-                rawModel++;
+                modelIndex++;
             }
         }
+    }
+
+    model->weigths[model->layers - 1] = (double **) malloc(model->npl[model->layers - 1] * sizeof(double *));
+    for(int i = 0; i < model->npl[model->layers - 1] + 1; i++) {
+        model->weigths[model->layers - 1][i] = (double *) malloc(sizeof(double));
+        model->weigths[model->layers - 1][i][0] = rawModel[modelIndex];
+        modelIndex++;
     }
 
     return model;
