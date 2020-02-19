@@ -47,7 +47,6 @@ __declspec(dllexport)void linearRegTrain(double *model, int inDim, double traini
 
     std::default_random_engine randomEngine(std::chrono::system_clock::now().time_since_epoch().count());
     std::uniform_real_distribution<float> distribution{0, 1};
-
     MatrixXd XMatrix(trainingParamsNumber, inDim + 1);
     MatrixXd YMatrix(trainingParamsNumber,1);
     for(int line = 0; line < trainingParamsNumber; line++) {
@@ -62,12 +61,11 @@ __declspec(dllexport)void linearRegTrain(double *model, int inDim, double traini
     std::cout << XMatrix << std::endl;
     std::cout << "Matrice Y :" << std::endl;
     std::cout << YMatrix << std::endl;
-
     MatrixXd resultMatrix = ((XMatrix.transpose() * XMatrix).inverse() * XMatrix.transpose()) * YMatrix;
     std::cout << "Resultat :" << std::endl;
     std::cout << resultMatrix << std::endl;
 
-    for (int i = 0; i < trainingParamsNumber; i++) {
+    for (int i = 0; i <= inDim; i++) {
         model[i] = resultMatrix(i, 0);
     }
 }
@@ -114,10 +112,10 @@ void predictAll(double *model) {
 int main(int argc, char **argv) {
     int inDim = 2;
     double *model = linearCreateModel(inDim);
-    double trainingParams[] = {-3, 9, 6, 13, -7, 2};
-    double trainingResults[] = {1, 1, -1};
+    double trainingParams[] = {-3, 9, 6, 13, -7, 2, -6, 1};
+    double trainingResults[] = {1, 1, -1, 1};
     //linearClassTrain(model, 2, 1000, 0.1, trainingParams, 3, trainingResults);
-    linearRegTrain(model, 2, 0.1, trainingParams, 3, trainingResults);
+    linearRegTrain(model, 2, 0.1, trainingParams, 4, trainingResults);
 
     //predictAll(model);
 

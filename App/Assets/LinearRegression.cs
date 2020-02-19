@@ -78,7 +78,7 @@ public class LinearRegression : MonoBehaviour
             Debug.Log("Create model before");
             return;
         }
-        Debug.Log(testSpheres.Length);
+
         // Call lib to predict test spheres
         foreach (var testSphere in testSpheres)
         {
