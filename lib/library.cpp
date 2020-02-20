@@ -70,24 +70,24 @@ __declspec(dllexport)void linearRegTrain(double *model, int inDim, double traini
     }
 }
 
-__declspec(dllexport)void linearClassTrain(double *model, int inDim, int epoch, double trainingStep,
-                                           double *trainingParams, int trainingParamsNumber, const double *trainingResults) {
+    __declspec(dllexport)void linearClassTrain(double *model, int inDim, int epoch, double trainingStep,
+                                               double *trainingParams, int trainingParamsNumber, const double *trainingResults) {
 
-    std::default_random_engine randomEngine(std::chrono::system_clock::now().time_since_epoch().count());
-    std::uniform_real_distribution<float> distribution{0, 1};
+        std::default_random_engine randomEngine(std::chrono::system_clock::now().time_since_epoch().count());
+        std::uniform_real_distribution<float> distribution{0, 1};
 
-        for(int e = 0; e < epoch; e++) {
-            int trainingPicked = (int) floor(distribution(randomEngine) * trainingParamsNumber);
-            int trainingParamsPosition = inDim * trainingPicked;
-            double modification = (double)trainingStep * (trainingResults[trainingPicked] -
-                    linearClassPredict(model, inDim, &trainingParams[trainingParamsPosition]));
-            model[0] += modification;
+            for(int e = 0; e < epoch; e++) {
+                int trainingPicked = (int) floor(distribution(randomEngine) * trainingParamsNumber);
+                int trainingParamsPosition = inDim * trainingPicked;
+                double modification = (double)trainingStep * (trainingResults[trainingPicked] -
+                        linearClassPredict(model, inDim, &trainingParams[trainingParamsPosition]));
+                model[0] += modification;
 
-        for(int j = 0; j < inDim; j++) {
-            model[j + 1] += modification * trainingParams[trainingParamsPosition + j];
+            for(int j = 0; j < inDim; j++) {
+                model[j + 1] += modification * trainingParams[trainingParamsPosition + j];
+            }
         }
     }
-}
 
     __declspec(dllexport) void linearClearModel(const double *model) {
         delete model;
@@ -197,6 +197,8 @@ __declspec(dllexport)void linearClassTrain(double *model, int inDim, int epoch, 
         }
         free(delta);
     }
+
+    
 }
 
 int sign(double value) {
