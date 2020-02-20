@@ -41,6 +41,7 @@ namespace DefaultNamespace
             }
         
             _model = linearCreateModel(_numberOfParams);
+            Debug.Log("Model created");
         }
 
         public void Train()
@@ -61,8 +62,11 @@ namespace DefaultNamespace
                 while((currentLine = sr.ReadLine()) != null) // CurrentLine will be null when the StreamReader reaches the end of file
                 {
                     if (currentLineIndex == -1)
+                    {
+                        currentLineIndex++;
                         continue;
-                        
+                    }
+
                     var currentImageParams = currentLine.Split(',');
                     for (int paramIndex = 1; paramIndex < currentImageParams.Length; paramIndex++)
                     {
@@ -76,6 +80,7 @@ namespace DefaultNamespace
                     currentLineIndex++;
                 }
             }
+            Debug.Log("Model trained");
         }
 
         public void Predict()
@@ -94,14 +99,18 @@ namespace DefaultNamespace
                 while((currentLine = streamReader.ReadLine()) != null) // currentLine will be null when the StreamReader reaches the end of file
                 {
                     if (currentLineIndex == -1)
+                    {
+                        currentLineIndex++;
                         continue;
-                    
+                    }
+
                     var values = currentLine.Split(',');
                     
                     double[] paramsDim = Array.ConvertAll(values.Skip(1).ToArray(), Double.Parse);
 
                     var predicted = linearClassPredict(_model.Value, _numberOfParams, paramsDim);
-                    // TODO: check if result (get 1) is equal to values[0] and store the result to analyze accuracy
+                    
+                    Debug.Log("predicted : " + predicted + " expected : " + values[0]);
                     
                     currentLineIndex++;
                 }
