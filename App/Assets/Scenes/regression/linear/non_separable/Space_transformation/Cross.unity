@@ -17934,7 +17934,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1247551136}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72984811c44144d8a0711593fcf9dc44, type: 3}
+  m_Script: {fileID: 11500000, guid: 1318c88ca853466db7624c676be84576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   testSpheres:
@@ -18164,7 +18164,6 @@ MonoBehaviour:
   - {fileID: 282751029}
   - {fileID: 624736845}
   trainingSpheres:
-  - {fileID: 171930709}
   - {fileID: 1390371098}
   - {fileID: 1526825882}
   - {fileID: 642812520}
@@ -18254,7 +18253,8 @@ MonoBehaviour:
   - {fileID: 740143099}
   - {fileID: 10022403}
   - {fileID: 1252361935}
-  epoch: 100000
+  - {fileID: 171930709}
+  epoch: 10000
 --- !u!4 &1247551138
 Transform:
   m_ObjectHideFlags: 0
