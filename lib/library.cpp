@@ -198,7 +198,6 @@ __declspec(dllexport)void linearClassTrain(double *model, int inDim, int epoch, 
         free(delta);
     }
 }
-}
 
 int sign(double value) {
     return value == 0 ? 0 : value < 0 ? -1 : 1;
